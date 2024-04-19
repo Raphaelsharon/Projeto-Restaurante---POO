@@ -9,6 +9,7 @@ def menu_principal():  # MENU PRINCIPAL
         MENU Principal:
 
         [1] - Cadastrar novo endereço
+        [p] - Cadastrar novo produto
         [s] - Sair
     ''')
     return str(input('Escolha uma opção: '))
@@ -30,9 +31,18 @@ def cadastrar_endereco():
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
 
+def cadatrar_produto():
+        int_codigo_produto = int(input("Informe o código do produto: "))
+        str_descricao = str(input("Informe a descrição do produto: "))
+        float_valor = float(input("Informe o valor do produto: "))
+        str_validade = str(input("Informe a validade do produto: "))
+        produto = Produto(int_codigo_produto, str_descricao, float_valor, str_validade)
+        return produto
+    
+opcao_escolhida = menu_principal() # menu_principal
+
 while True:
-    # menu_principal
-    opcao_escolhida = menu_principal()
+    
     # verificando escolha
     if (opcao_escolhida == "s"):
         break
@@ -45,3 +55,14 @@ while True:
             print(endereco._complemento)
             print(endereco._bairro)
             print(endereco._cidade)
+            
+    elif (opcao_escolhida == "p"):
+        produto = cadatrar_produto()
+        if (produto):
+            print("Novo produto castrado com sucesso!")
+            print(f"Código: {produto._codigo_produto}")
+            print(f"Descrição: {produto._descricao}")
+            print(f"Valor: {produto._valor}")
+            print(f"Validade: {produto._validade}")
+            
+    opcao_escolhida = menu_principal()
