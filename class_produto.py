@@ -2,10 +2,10 @@
 class Produto:
     # definicão do construtor
     # em python podemos criar os atributos classe pelo construtor 
-    def __init__(self, codigo_produto, descricao, valor, validade):
+    def __init__(self, codigo_produto, descricao, preco, validade):
         self.__codigo_produto = codigo_produto # __ modificador de acesso private
         self.__descricao = descricao
-        self.__valor = valor
+        self.__preco = preco
         self.__validade = validade
 
     @property
@@ -25,12 +25,12 @@ class Produto:
         self.__descricao = value
 
     @property
-    def _valor(self):
-        return self.__valor
+    def _preco(self):
+        return self.__preco
 
-    @_valor.setter
-    def _valor(self, value):
-        self.__valor = value
+    @_preco.setter
+    def _preco(self, value):
+        self.__preco = value
 
     @property
     def _validade(self):

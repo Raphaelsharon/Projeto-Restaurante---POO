@@ -8,20 +8,54 @@ from datetime import datetime
 def menu_principal():  # MENU PRINCIPAL
     print('''
         MENU Principal:
-
-        [1] - Cadastrar novo endereço
+        [1] - Controle de vendas
         [2] - Cadastrar novo produto
-        [3] - Remover produto
+        [3] - Remover um produto
+        [4] - Pesquisar um produto
         [s] - Sair
     ''')
     return str(input('Escolha uma opção: '))
 
+def menu_pedido():
+    print('''
+        MENU Vendas:
+        [1] - Abrir novo pedido
+        [2] - Adicionar item ao pedido
+        [3] - Remover item do pedido
+        [4] - Listar itens do pedido em detalhes
+        [5] - Finalizar pedido e imprimir
+        [s] - Sair
+    ''')
+    return str(input('Escolha uma opção: '))
 
+def pedido_adicionar():
+    # código pedido gerado automaticamente
+    endereco_pedido = cadastrar_endereco()
+    codido_pedido = int(len(pedidos))
+    return Pedido(codido_pedido, endereco_pedido)
+
+def pedido_adicionar_item():
+    int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
+    if buscar_pedido_por_codigo(int_pedido_selecionado):
+        # verificar se pedido existe
+        pedido = pedidos[int_pedido_selecionado]
+        int_codigo_produto = int(input('Informe o código do produto para adicionar ao pedido: '))
+        produto = buscar_produto_por_codigo(int_codigo_produto)
+        if produto:
+            int_quantidade_item = int(input('Informe a quantidade do item:'))
+            novo_item_pedido = ItemPedido(produto, int_quantidade_item)
+            pedido.adicionar_item_ao_pedido(novo_item_pedido)
+            print(novo_item_pedido._preco_item)
+        #return Pedido(codido_pedido, endereco_pedido)
+    else:
+        print("Pedido inexistente")
+        return False
+    
 def cadastrar_endereco():
-    str_cep = str(input('Informe o cep: '))
+    str_cep = str(input('Informe o cep do endereço: '))
     str_rua = str(input('Informe a rua: '))
     int_num = int(input('Informe o número: '))
-    str_complemento = str(input('Informe o complemento: '))
+    str_complemento = str(input('Informe o complemento do endereço: '))
     str_bairro = str(input('Informe o bairro: '))
     str_cidade = str(input('Informe a cidade: '))
     endereco = Endereco(str_cep, str_rua, int_num,
@@ -31,10 +65,10 @@ def cadastrar_endereco():
 def cadastrar_produto():
     int_codigo = int(input('Informe o código identificador do produto: '))
     str_nome = str(input('Qual o nome/descrição do produto? '))
-    flt_valor = float(input('Informe o valor (ex. 0.00): '))
+    flt_preco = float(input('Informe o valor (ex. 0.00): '))
     date_validade = (input('Informe a validade do produto (formato dd/mm/aaaa): '))
     date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
-    return Produto(int_codigo, str_nome, flt_valor, date_validade)    
+    return Produto(int_codigo, str_nome, flt_preco, date_validade)    
 
 def remover_produto():
     int_codigo_remocao = int(input('Informe o código do produto para remoção: '))
@@ -42,14 +76,19 @@ def remover_produto():
     print("Produto (" + produto_remover._descricao + ") removido!") 
     del estoque_produtos[int_codigo_remocao]  
 
-def buscar_produto_por_codigo():
-    int_codigo_remocao = int(input('Informe o código do produto para busca: '))
+def buscar_produto_por_codigo(int_codigo_produto):
     # Verifica se existe produto cadastrado
     for chave in estoque_produtos.keys():
-        if chave == int_codigo_remocao:
-            return estoque_produtos[int_codigo_remocao]
+        if chave == int_codigo_produto:
+            return estoque_produtos[int_codigo_produto]
     return False
-    
+
+def buscar_pedido_por_codigo(int_codigo_pedido):
+    # Verifica se existe produto cadastrado
+    for chave in pedidos.keys():
+        if chave == int_codigo_pedido:
+            return pedidos[int_codigo_pedido]
+    return False
 
 
 # Aplicação de exemplo disciplina POO - UFRB
@@ -57,39 +96,59 @@ def buscar_produto_por_codigo():
 # Professor Guilherme Braga Araújo
 
 estoque_produtos = {}
+pedidos = {}
 
 while True:
     # menu_principal
     opcao_escolhida = menu_principal()
     # verificando escolha
+    # opc sair
     if (opcao_escolhida == "s"):
         break
+    # opc 1
     elif (opcao_escolhida == "1"):
-        endereco = cadastrar_endereco()
-        if (endereco):
-            print("Configuramos um objeto endereço, veja: ")
-            print(endereco._cep)
-            print(endereco._rua)
-            print(endereco._complemento)
-            print(endereco._bairro)
-            print(endereco._cidade)
-
+        while True:
+            opcao_escolhida = menu_pedido()
+            # opc menu vendas - novo pedido
+            if (opcao_escolhida == "1"):
+                pedido = pedido_adicionar()
+                if (pedido):
+                    # adiciona pedido ao sistema
+                    pedidos[pedido._codigo_pedido] = pedido
+            
+                print(pedido._codigo_pedido)
+                print(pedido._endereco_entrega._bairro)
+            # opc menu vendas - adicionar item    
+            elif (opcao_escolhida == "2"):
+                pedido_adicionar_item()
+            #elif (opcao_escolhida == "3"):
+            #    pedido_adicionar()
+            #elif (opcao_escolhida == "4"):
+            #    pedido_adicionar()
+            else:
+                # Volta para o menu principal
+                break
+               
+    # opc 2
     elif (opcao_escolhida == "2"):
         produto = cadastrar_produto()
         if (produto):
             # adiciona produto ao nosso estoque
             estoque_produtos[produto._codigo_produto] = produto
-    
+    # opc 3
     elif (opcao_escolhida == "3"):
         remover_produto()
-    
-    #print(estoque_produtos)
-    produto_pesquisa = buscar_produto_por_codigo()
-    if (produto_pesquisa):
-        print("Produto encontrado:")
-        print(">Código=" + str(produto_pesquisa._codigo_produto))
-        print(">Descricao=" + produto_pesquisa._descricao)
-        print(">Valor=" + str(produto_pesquisa._valor))
-        print(">Validade=" + str(produto_pesquisa._validade))
+    # opc 4
+    elif (opcao_escolhida == "4"):
+        int_codigo_produto = int(input('Informe o código do produto para busca: '))
+        produto_pesquisa = buscar_produto_por_codigo(int_codigo_produto)
+        if (produto_pesquisa):
+            print("Produto encontrado:")
+            print(">Código=" + str(produto_pesquisa._codigo_produto))
+            print(">Descricao=" + produto_pesquisa._descricao)
+            print(">Valor=" + str(produto_pesquisa._preco))
+            print(">Validade=" + str(produto_pesquisa._validade))
+        else:
+            print("Produto nâo cadastrado/encontrado.")
     else:
-        print("Produto nâo cadastrado/encontrado.")
+        print("A opção escolhida é inválida.")
