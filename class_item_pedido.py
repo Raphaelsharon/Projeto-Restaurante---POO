@@ -1,16 +1,16 @@
 class ItemPedido:
     def __init__(self, produto, quantidade):
-        self.__codigo_produto = produto._codigo_produto
+        self.__produto = produto
         self.__quantidade = quantidade
         self.__preco_item = produto._preco * quantidade
 
     @property
-    def _codigo_produto(self):
-        return self.__codigo_produto
+    def _produto(self):
+        return self.__produto
 
-    @_codigo_produto.setter
-    def _codigo_produto(self, value):
-        self.__codigo_produto = value
+    @_produto.setter
+    def _produto(self, value):
+        self._produto = value
 
     @property
     def _quantidade(self):
@@ -27,6 +27,3 @@ class ItemPedido:
     @_preco_item.setter
     def _preco_item(self, value):
         self.__preco_item = value
-
-
-
