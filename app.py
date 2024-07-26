@@ -28,12 +28,31 @@ def menu_pedido():
     ''')
     return str(input('Escolha uma opção: '))
 
-def pedido_adicionar():
+'''def pedido_adicionar():
     # código pedido gerado automaticamente
     endereco_pedido = cadastrar_endereco()
     # a numeração do pedido começa de 1 até n
     codido_pedido = int(len(pedidos)) + 1
-    return Pedido(codido_pedido, endereco_pedido)
+    return Pedido(codido_pedido, endereco_pedido)'''
+
+def pedido_adicionar():
+    # código pedido gerado automaticamente
+    # alterado -> administrar pedido para entrega e pedido para consumo no local
+    local = input('''
+                    [1] - Pedido para consumir no local
+                    [2] - Pedido para entrega
+                    ''')
+    if local == '1':
+        codigo_pedido = int(len(pedidos) + 1)  # a numeração do pedido começa de 1 até n
+        print(f'O código do pedido é {codigo_pedido}')  # alterado -> mostrar o código do pedido
+        endereco_pedido = None
+    elif local == '2':
+        # código pedido gerado automaticamente
+        endereco_pedido = cadastrar_endereco()
+        # a numeração do pedido começa de 1 até n
+        codido_pedido = int(len(pedidos)) + 1
+        # alterado -> mostrar o código do pedido
+    return Pedido(codigo_pedido, endereco_pedido)
 
 def pedido_adicionar_item():
     int_pedido_selecionado = int(input('Informe o código do pedido para adicionar um novo item: '))
@@ -77,6 +96,7 @@ def pedido_listar_items():
         return False
     
 def cadastrar_endereco():
+    
     str_cep = str(input('Informe o cep do endereço: '))
     str_rua = str(input('Informe a rua: '))
     int_num = int(input('Informe o número: '))
@@ -115,6 +135,15 @@ def buscar_pedido_por_codigo(int_codigo_pedido):
             return pedidos[int_codigo_pedido]
     return False
 
+def pedido_finalizar(): # add r.b.santos
+    int_pedido_selecionado = int(input('Informe o código do pedido para finalizar: '))
+    if buscar_pedido_por_codigo(int_pedido_selecionado):
+        # verificar se pedido existe
+        pedido = pedidos[int_pedido_selecionado]
+        pedido.finalizar()
+    else:
+        print("Pedido inexistente")
+    return pedido
 # Aplicação de exemplo disciplina POO - UFRB
 # Sistema de controle de pedidos
 # Professor Guilherme Braga Araújo
@@ -140,14 +169,14 @@ while True:
                     # adiciona pedido ao sistema
                     pedidos[pedido._codigo_pedido] = pedido
             # opc menu vendas - adicionar item    
-            elif (opcao_escolhida == "2"):
-                pedido_adicionar_item()
-            elif (opcao_escolhida == "3"):
-                pedido_remover_item()
+                elif (opcao_escolhida == "2"):
+                    pedido_adicionar_item()
+                elif (opcao_escolhida == "3"):
+                    pedido_remover_item()
             elif (opcao_escolhida == "4"):
                 pedido_listar_items()
-            #elif (opcao_escolhida == "5"):
-                #pedido_finalizar()
+            elif (opcao_escolhida == "5"):
+                pedido_finalizar()
             else:
                 # Volta para o menu principal
                 break

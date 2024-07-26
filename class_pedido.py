@@ -86,3 +86,9 @@ class Pedido:
         print(str_line, end='\n')
         str_line = "** FIM DAS INFORMAÇÕES DO PEDIDO **"
         print(str_line, end='\n')
+
+    def finalizar(self): # add r.b.santos
+        self._status = 1
+        print(self.toString())
+        print("**PEDIDO FINALIZADO**")
+        return self._status
