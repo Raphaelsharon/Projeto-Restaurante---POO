@@ -1,8 +1,8 @@
+from class_cadastrar_produto import Cadastrar_Produto
 from class_endereco import Endereco
 from class_item_pedido import ItemPedido
 from class_pedido import Pedido
 from class_produto import Produto
-
 from datetime import datetime
 
 def menu_principal():  # MENU PRINCIPAL
@@ -107,7 +107,7 @@ def cadastrar_endereco():
                         str_complemento, str_bairro, str_cidade)
     return endereco
 
-def cadastrar_produto():
+def cadastrar_produto_individual():
     int_codigo = int(input('Informe o código identificador do produto: '))
     str_nome = str(input('Qual o nome/descrição do produto? '))
     flt_preco = float(input('Informe o valor (ex. 0.00): '))
@@ -179,14 +179,25 @@ while True:
                 pedido_finalizar()
             else:
                 # Volta para o menu principal
-                break
-               
+                break        
     # opc 2
-    elif (opcao_escolhida == "2"):
-        produto = cadastrar_produto()
-        if (produto):
-            # adiciona produto ao nosso estoque
+    elif (opcao_escolhida == "2"): 
+        try: #add r.b.santos 
+            pedido = Cadastrar_Produto.converter_para_csv()
+            if pedido is not None:
+                produtos_lista = {}
+                for index, row in pedido.iterrows():
+                    codigo = row['codigo']
+                    nome = row['nome']
+                    preco = row['preco']
+                    validade = row['validade']
+                    produto = Cadastrar_Produto.cadastrar_produto_lista(codigo,nome,preco,validade)
+                    print(produto._codigo_produto, produto._descricao, produto._preco, produto._validade)
+        except Exception as e:
+            print(e)
+            produto = cadastrar_produto_individual()            
             estoque_produtos[produto._codigo_produto] = produto
+            print("except")       
     # opc 3
     elif (opcao_escolhida == "3"):
         remover_produto()

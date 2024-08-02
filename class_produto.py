@@ -7,7 +7,8 @@ class Produto:
         self.__descricao = descricao
         self.__preco = preco
         self.__validade = validade
-
+    
+    
     @property
     def _codigo_produto(self):
         return self.__codigo_produto
@@ -39,3 +40,4 @@ class Produto:
     @_validade.setter
     def _validade(self, value):
         self.__validade = value
+    
