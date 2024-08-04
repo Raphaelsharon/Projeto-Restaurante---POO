@@ -1,14 +1,13 @@
 # definição da classe
 class Endereco:
     # definicão do construtor
-    # em python podemos criar os atributos classe pelo construtor 
-    def __init__(self, cep=None, rua=None, numero=None, complemento=None, bairro=None, cidade=None):
-        self.__cep = cep # __ modificador de acesso private
+    # em python podemos criar os atributos classe pelo construtor
+    def __init__(self, rua, numero, complemento, bairro):
         self.__rua = rua
         self.__numero = numero
         self.__complemento = complemento
         self.__bairro = bairro
-        self.__cidade = cidade
+
 
     @property
     def _cep(self):

@@ -14,11 +14,10 @@ class Cadastrar_Produto(Produto):
         str_nome = str(nome)
         flt_preco = float(preco)
         date_validade = str(validade)
-        date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
+        #date_validade = datetime.strptime(date_validade, '%d/%m/%Y')
         return Produto(int_codigo, str_nome, flt_preco, date_validade)
     
     def converter_para_csv():
-        print("Converte")
         arquivo_selecionado = filedialog.askopenfilename()
         if arquivo_selecionado:
             extensao_arquivo = arquivo_selecionado.split('.')[-1]

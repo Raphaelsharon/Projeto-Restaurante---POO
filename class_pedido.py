@@ -1,3 +1,4 @@
+from pickle import STRING
 # definição da classe
 class Pedido:
     # definicão do construtor
@@ -6,8 +7,10 @@ class Pedido:
         self.__codigo_pedido = codido_pedido
         self.__endereco_entrega = endereco_entrega
         self.__status = 0  # 0 = aberto, 1 = finalizado/pago
-        # criando uma estrutura map em python para armzenar itens do pedido
+        # criando uma estrutura map em python para armazenar itens do pedido
         self.__itens_pedidos = []
+        self.garcom = None
+        self.atendente = None
 
     @property
     def _status(self):
@@ -51,7 +54,7 @@ class Pedido:
         return int(len(self.__itens_pedidos))
         # return self.__itens_pedidos.__sizeof__
 
-    def toString(self):
+    def toString(self, porcentagem_funcionar):
         str_line = "** INÍCIO DAS INFORMAÇÕES DO PEDIDO **"
         print(str_line, end='\n')
         str_line = "CÓDIGO DO PEDIDO:" + str(self._codigo_pedido)
@@ -59,15 +62,43 @@ class Pedido:
         str_line = "STATUS DO PEDIDO:" + \
             str(self._status)  # (0-aberto | 1-finalizado)
         print(str_line, end='\n')
-        str_line = "CEP ENDEREÇO PARA ENTREGA:" + \
-            str(self._endereco_entrega._cep)
         print(str_line, end='\t')
-        str_line = "RUA:" + str(self._endereco_entrega._rua)
-        print(str_line, end='\t')
-        str_line = "BAIRRO/CIDADE PARA ENTREGA:" + \
-            str(self._endereco_entrega._bairro) + "/" + \
-            str(self._endereco_entrega._cidade)
-        print(str_line, end='\n')
+
+#################### para imprimir o endereço apenas se ele existir by isaias
+        if self._endereco_entrega: #verifica se existe
+          str_line = "RUA:" + str(self._endereco_entrega._rua)
+          print(str_line, end='\t')
+          str_line = "BAIRRO:" + str(self._endereco_entrega._bairro) + "/" + \
+          print(str_line, end='\n')
+
+        else:
+            print("Pedido para consumo no local")
+
+########### Imprimir as informções do garçom/ atendente by isaias
+
+        if self.garcom: # verifica se o graçom existe
+          str_line = "** INFORMAÇÕES DO GARÇOM **"
+          print(str_line, end='\n')
+          str_line = "NOME DO GARÇOM:" + str(self.garcom._nome)
+          print(str_line, end='\t')
+          str_line = "10% DO GARÇOM (R$):" + str(self.dez_porcento)
+          print(str_line, end='\n')
+
+        elif self.atendente:  # verifica se o atendente existe
+          str_line = "** INFORMAÇÕES DA ATENDENTE **"
+          print(str_line, end='\n')
+          str_line = "NOME DA ATENDENTE:" + str(self.atendente._nome)
+          print(str_line, end='\t')
+          str_line = "10% DA ATENDENTE (R$):" + str(self.dez_porcento)
+          print(str_line, end='\n')
+
+        calc_preco_total = 0.0
+        for i, item in enumerate(self._itens_pedidos):
+            calc_preco_total += item._preco_item
+
+        # Calcula os 10%
+        dez_porcento = calcular_dez_porcento(calc_preco_total)
+
         str_line = "QUANTIDADE DE ITENS DO PEDIDO:" + \
             str(self.quantidade_itens_pedido())
         print(str_line, end='\n')
@@ -91,4 +122,3 @@ class Pedido:
         self._status = 1
         print(self.toString())
         print("**PEDIDO FINALIZADO**")
-        return self._status
